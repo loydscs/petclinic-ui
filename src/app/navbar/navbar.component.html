@@ -4,24 +4,48 @@
   <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-  <ul class="navbar-nav mr-auto"  >
+  
 
     <ng-container *ngIf="this.auth.isAuthenticated();then authenticated;else notAuthenticated">
 
     </ng-container>
 
       <ng-template #notAuthenticated>
-        <li class="nav-item"><a href="javascript:void(0);" routerLink="/register"  class="nav-link" style="color:rgb(255, 255, 255)" >Register</a></li>
-        <li><a class="nav-link" href="javascript:void(0);" routerLink="/login"style="color:rgb(255, 255, 255)" >Login</a></li>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/register" class="nav-link"
+              style="color:rgb(255, 255, 255)">Register</a></li>
+          <li><a class="nav-link" href="javascript:void(0);" routerLink="/login" style="color:rgb(255, 255, 255)">Login</a>
+          </li>
+        </ul>
       </ng-template>
-
       <ng-template #authenticated>
-        <li class="nav-item"><a href="javascript:void(0);" routerLink="/dashboard" class="nav-link" style="color:rgb(255, 255, 255)" >Dashboard</a></li>
-        <li><a class="nav-link" href="javascript:void(0);"  (click)="logout()" >Logout</a></li>
+        <ul class="navbar-nav mr-auto" *ngIf="this.auth.currentUser().role.id == 1">
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/petowners" class="nav-link"
+              style="color:rgb(255, 255, 255)">Pet Owners</a></li>
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/veterinarian" class="nav-link"
+              style="color:rgb(255, 255, 255)">Veterinarians</a></li>
+        </ul>
+      
+        <ul class="navbar-nav mr-auto" *ngIf="this.auth.currentUser().role.id == 2">
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/pets" class="nav-link"
+              style="color:rgb(255, 255, 255)">Pets</a></li>
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/appointments" class="nav-link"
+              style="color:rgb(255, 255, 255)">My Appointments</a></li>
+        </ul>
+      
+        <ul class="navbar-nav mr-auto" *ngIf="this.auth.currentUser().role.id == 3">
+      
+          <li class="nav-item"><a href="javascript:void(0);" routerLink="/appointments" class="nav-link"
+              style="color:rgb(255, 255, 255)">Appointments</a></li>
+        </ul>
+      
+        <ul class="navbar-nav mr-auto">
+          <li><a class="nav-link" href="javascript:void(0);" (click)="logout()">Logout</a></li>
+        </ul>
       </ng-template>
 
 
-  </ul>
+ 
 
   </div>
 </nav>

@@ -10,10 +10,17 @@ export class AuthService {
   constructor(private router:Router,private http:HttpClient) { }
 
   isAuthenticated():boolean{
-    if (sessionStorage.getItem('token')!==null) {
+    if (localStorage.getItem('usermeta')!==null) {
         return true;
     }
     return false;
+  }
+
+  currentUser(): any {
+    if (localStorage.getItem('usermeta') !== null) {
+      let currentUserJson = localStorage.getItem('usermeta') ;    
+      return JSON.parse(currentUserJson!);
+    }
   }
 
   canAccess(){
@@ -42,13 +49,21 @@ export class AuthService {
       sessionStorage.setItem('token',token);
   }
 
+  storeLoginUser(data: any){
+    localStorage.setItem('usermeta', JSON.stringify(data));
+
+  }
+
   login(email:string,password:string){
-    //send data to login api (firebase)
-      return this.http
-      .post<{idToken:string}>(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]',
-            {email,password}
-      );
+        const loginData  = {
+          'email' : email,
+          'password' : password
+        };
+          return this.http
+          .post<{idToken:string}>(
+              'http://localhost:8081/api/v1/login',
+              loginData
+          );
   }
 
   detail(){
@@ -61,7 +76,7 @@ export class AuthService {
   }
 
   removeToken(){
-    sessionStorage.removeItem('token');
+    localStorage.removeItem('usermeta');
   }
 
 
