@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   onSubmit(){
     this.loading=true;
     //call login service
+    console.log('test===>', this.formdata)
     this.auth.login(this.formdata.email,this.formdata.password)
     .subscribe({
         next:data=>{
@@ -30,7 +31,7 @@ export class LoginComponent implements OnInit {
             this.auth.canAuthenticate();
         },
         error:data=>{
-            if (data.error.error.message=="INVALID_PASSWORD" || data.error.error.message=="INVALID_EMAIL") {
+            if (data.status == 404) {
                 this.errorMessage = "Invalid Credentials!";
             } else{
                 this.errorMessage = "Unknown error when logging into this account!";

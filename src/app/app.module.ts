@@ -9,7 +9,8 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule} from '@angular/common/http'
+import { HttpClientModule} from '@angular/common/http';
+import { VeterinarianComponent } from './veterinarian/veterinarian.component'
 
 const routes:Routes = [
   {path:'',component:HomeComponent },
@@ -25,7 +26,8 @@ const routes:Routes = [
     HomeComponent,
     RegisterComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    VeterinarianComponent
   ],
   imports: [
     BrowserModule,

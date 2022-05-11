@@ -43,11 +43,14 @@ export class AuthService {
   }
 
   login(email:string,password:string){
-    //send data to login api (firebase)
+    const loginPayload = {
+      "email": email,
+      "password": password
+      }
       return this.http
       .post<{idToken:string}>(
-          'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]',
-            {email,password}
+          'http://localhost:8080/api/v1/login',
+          loginPayload
       );
   }
 
