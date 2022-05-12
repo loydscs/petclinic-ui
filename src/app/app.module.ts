@@ -10,12 +10,18 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http'
+import { PetownerComponent } from './petowner/petowner.component';
+import { VeterinarianComponent } from './veterinarian/veterinarian.component';
+import { DataTablesModule } from 'angular-datatables';
 
 const routes:Routes = [
   {path:'',component:HomeComponent },
+  {path:'dashboard',component:DashboardComponent},
   {path:'register',component:RegisterComponent},
   {path:'login',component:LoginComponent},
-  {path:'dashboard',component:DashboardComponent}
+  {path:'petowners',component:PetownerComponent},
+  {path:'veterinarian',component:VeterinarianComponent}
+
 ]
 
 @NgModule({
@@ -25,13 +31,15 @@ const routes:Routes = [
     HomeComponent,
     RegisterComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    PetownerComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    DataTablesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
