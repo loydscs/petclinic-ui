@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { DataTableDirective } from 'angular-datatables';
+import { environment } from './../../environments/environment';
+import { Router } from '@angular/router';
+
 import {Subject} from 'rxjs';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-petowner',
@@ -10,27 +13,26 @@ import {Subject} from 'rxjs';
 })
 export class PetownerComponent implements OnInit {
   petowners: any = [];
+    petowner: any = {};
+    errorMessage: string = "";
+
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
-  constructor(public userService: UserService) {
+  constructor(private router:Router, public userService: UserService, private modalService: NgbModal) {
     this.petowners = []
+    this.petowner = {}
 
    }
+   
 
-  // ngOnInit(): void {
-  // }
   currentPetOwner = null;
   currentIndex = -1;
   name = '';
-  // dtOptions: DataTables.Settings = {};
-
-
-
+  closeResult!: string;
 
   ngOnInit(): void {
     this.getPetOwners();
     this.dtOptions = {
-      // pagingType: 'full_numbers',
       pageLength: 5,
       processing: true
     };
@@ -40,50 +42,73 @@ export class PetownerComponent implements OnInit {
     this.userService.getAllPetOnwers()
       .subscribe((users: any) => {
         this.petowners = users;
-        // this.dtTrigger.next();
       })
-        // users => {
-        //   this.petowners = users;
-        // },
-        // error => {
-        //   console.log(error);
-        // }));
   }
-
-  // refresh(): void {
-  //   this.readProducts();
-  //   this.currentProduct = null;
-  //   this.currentIndex = -1;
-  // }
 
   setCurrentPetOwner(petowner: any, index: number): void {
     this.currentPetOwner = petowner;
     this.currentIndex = index;
   }
 
-  // deleteAllProducts(): void {
-  //   this.productService.deleteAll()
-  //     .subscribe(
-  //       response => {
-  //         console.log(response);
-  //         this.readProducts();
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       });
-  // }
+   editModal(content: any, petowner: any) {
+      this.petowner = petowner;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      this.savePetOwner();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
 
-  // searchByName(): void {
-  //   this.productService.searchByName(this.name)
-  //     .subscribe(
-  //       products => {
-  //         this.products = products;
-  //         console.log(products);
-  //       },
-  //       error => {
-  //         console.log(error);
-  //       });
-  // }
+  open(content: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      this.savePetOwner();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  savePetOwner(){
+        this.petowner['role'] = {"id": environment.petOwnerRoleId}
+        this.userService.createPetOwner(this.petowner)
+    .subscribe({
+        next:data=>{
+        this.getPetOwners();
+        },
+        error:data=>{
+        this.errorMessage = "Something went wrong!";
+        }
+    }).add(()=>{
+
+    })
+  }
+
+  deletePetOwner(petownerId: number){
+    if(confirm("Are you sure to delete ")) {
+        this.userService.deletePetOwner(petownerId)
+    .subscribe({
+        next:data=>{
+        this.getPetOwners();
+        },
+        error:data=>{
+        this.errorMessage = "Something went wrong!";
+        }
+    })
+    } else {
+       this.errorMessage = "Something went wrong!";
+    }
+  }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();

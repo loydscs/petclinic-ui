@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
     .subscribe({
         next:data=>{
             //store token
-           this.auth.storeToken(data.idToken);
+          //  this.auth.storeToken(data.idToken);
             this.auth.storeLoginUser(data);
             console.log('logged user token is '+data.idToken);
             this.auth.canAuthenticate();

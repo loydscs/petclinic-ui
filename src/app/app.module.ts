@@ -13,6 +13,7 @@ import { HttpClientModule} from '@angular/common/http'
 import { PetownerComponent } from './petowner/petowner.component';
 import { VeterinarianComponent } from './veterinarian/veterinarian.component';
 import { DataTablesModule } from 'angular-datatables';
+import { NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 const routes:Routes = [
   {path:'',component:HomeComponent },
@@ -39,7 +40,8 @@ const routes:Routes = [
     RouterModule.forRoot(routes),
     FormsModule,
     HttpClientModule,
-    DataTablesModule
+    DataTablesModule,
+    NgbModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]
